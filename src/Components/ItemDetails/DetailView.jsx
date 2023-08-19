@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-
+import { useState, useEffect,useContext } from 'react';
+import axios from 'axios';
 import { styled, Box, Typography, Grid } from '@mui/material';
-
+import { LoginContext } from '../../context/ContextProvider';
 import ProductDetail from './ProductDetail';
 import ActionItem from './ActionItem';
 import { useParams } from 'react-router-dom';
@@ -32,18 +32,32 @@ const RightContainer = styled(Grid)`
 
 const DetailView = () => {
     const fassured = 'https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/fa_62673a.png'
-    
+    const { account, setAccount } = useContext(LoginContext);
     const { id } = useParams();
 
     const { loading, product } = useSelector(state => state.getProductDetails);
 
     const dispatch = useDispatch();
-    
+    const sendLogdetails= async ()=>{
+        if(!account){
+            return;
+        }
+        console.log("hello")
+        const result = await axios.post('https://flipkartgrid-backend.glitch.me/logs/addItemInLogs',{
+            'username':account,
+            'productid':id
+        })
+    }
     useEffect(() => {
-        if(product && id !== product.id)   
+        if(product && id !== product.id){
             dispatch(getProductDetails(id));
+            console.log("account",account)
+            // sendLogdetails()
+        }   
     }, [dispatch, product, id, loading]);
-
+    useEffect(()=>{
+        sendLogdetails();
+    },[])
     return (
         <Component>
             <Box></Box>

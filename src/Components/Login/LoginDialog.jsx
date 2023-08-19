@@ -125,7 +125,7 @@ const LoginDialog = ({ open, setOpen, setAccount }) => {
         else {
             showError(false);
             handleClose();
-            setAccount(login.username);
+            setAccount(response.data.username);
         }
     }
 
